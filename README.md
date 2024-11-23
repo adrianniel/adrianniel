@@ -1,16 +1,12 @@
-## Hi there 👋
+Hi there!
+My name is Niel Adrian😊. A first-year Computer Science student at Bohol Island State University🏫.
+As a first year, I have many questions and confusions or uncertainties. I'm looking for someone I can relate to and grow with💙.
+By the way, I love coding💻 and I am interested in Web Development🛜 and App development📱.
 
-<!--
-**adrianniel/adrianniel** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+🚀 Skills and Interests:
+Programming Languages: C, HTML, CSS, JavaScript (starting soon)
+Tools & Platforms: VS Code, Devc++  
 
-Here are some ideas to get you started:
-
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+🎯 My Goals:
+Become a Full-stack Developer someday.
+Build my own application.
