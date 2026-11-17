@@ -14,4 +14,10 @@
 
 <img src="profile-3d-contrib/profile-night-rainbow.svg" width="100%" alt="3D contribution graph" />
 
+<br /><br />
+
+<a href="https://adrianniel.github.io/"><img src="https://img.shields.io/badge/Terminal-0c0f1a?style=for-the-badge&logo=gnometerminal&logoColor=22d3ee" alt="Interactive terminal" /></a>
+<a href="https://github.com/adrianniel"><img src="https://img.shields.io/badge/GitHub-0c0f1a?style=for-the-badge&logo=github&logoColor=a78bfa" alt="GitHub" /></a>
+<a href="mailto:adrianniel.garig@gmail.com"><img src="https://img.shields.io/badge/Email-0c0f1a?style=for-the-badge&logo=gmail&logoColor=f472b6" alt="Email" /></a>
+
 </div>
