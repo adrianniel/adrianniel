@@ -20,4 +20,6 @@
 <a href="https://github.com/adrianniel"><img src="https://img.shields.io/badge/GitHub-0c0f1a?style=for-the-badge&logo=github&logoColor=a78bfa" alt="GitHub" /></a>
 <a href="mailto:adrianniel.garig@gmail.com"><img src="https://img.shields.io/badge/Email-0c0f1a?style=for-the-badge&logo=gmail&logoColor=f472b6" alt="Email" /></a>
 
+<img src="assets/footer.svg" width="100%" alt="" />
+
 </div>
