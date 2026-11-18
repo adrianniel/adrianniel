@@ -29,7 +29,7 @@ PROJECTS = [
     },
     {
         "name": "Dagohoy Pharmacy",
-        "tag": "shipped",
+        "tag": "live",
         "desc": "Point-of-sale and pharmacy operations workspace with role-based screens for owners, admins and cashiers.",
         "stack": ["React", "TypeScript", "NestJS", "MySQL"],
     },
