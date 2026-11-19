@@ -7,7 +7,7 @@
 <br />
 
 <a href="https://adrianniel.github.io/" title="Explore projects in the terminal">
-  <img src="assets/projects.svg" width="100%" alt="Featured projects. iQueue (in progress): queue-management platform for campus offices with a student mobile app, an admin portal and a live display board, built with Expo, Next.js, Express and Prisma. L.I.S.A. (live): irrigation survey and analysis system for BISU Bilar with farmer surveys on a map, reports and AI-generated analysis, built with React, Express, OpenLayers and MySQL. Dagohoy Pharmacy (live): point-of-sale and pharmacy operations workspace with role-based screens, built with React, TypeScript, NestJS and MySQL." />
+  <img src="assets/projects.svg" width="100%" alt="Featured projects. Tumbli (new): a floating water reminder for Windows that docks at the screen edge, fills up as you drink and reminds you to take a break, built with Tauri, Rust, React and TypeScript. iQueue (in progress): queue-management platform for campus offices with a student mobile app, an admin portal and a live display board, built with Expo, Next.js, Express and Prisma. L.I.S.A. (live): irrigation survey and analysis system for BISU Bilar with farmer surveys on a map, reports and AI-generated analysis, built with React, Express, OpenLayers and MySQL. Dagohoy Pharmacy (live): point-of-sale and pharmacy operations workspace with role-based screens, built with React, TypeScript, NestJS and MySQL." />
 </a>
 
 <br /><br />
