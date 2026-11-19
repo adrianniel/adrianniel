@@ -16,6 +16,12 @@ ASSETS = ROOT / "assets"
 
 PROJECTS = [
     {
+        "name": "Tumbli",
+        "tag": "new",
+        "desc": "A floating water buddy for Windows: a little bottle with a face that docks at the screen edge, fills up as you drink and reminds you to take a break.",
+        "stack": ["Tauri", "Rust", "React", "TypeScript"],
+    },
+    {
         "name": "iQueue",
         "tag": "in progress",
         "desc": "Queue-management platform for campus offices: a student mobile app, an admin portal and a live display board.",
@@ -71,10 +77,12 @@ def prompt_line(x, y, command, flag, delay=0.0):
 
 def projects():
     pad, gap = 24, 20
-    card_w = (W - 2 * pad - 2 * gap) / 3
-    card_h = 236
+    cols = 2 if len(PROJECTS) % 2 == 0 and len(PROJECTS) % 3 else 3
+    rows = -(-len(PROJECTS) // cols)
+    card_w = (W - 2 * pad - (cols - 1) * gap) / cols
+    card_h = 236 if cols == 3 else 216
     top = 62
-    H = top + card_h + pad
+    H = top + rows * card_h + (rows - 1) * gap + pad
     o = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" '
         f'role="img" aria-label="Featured projects: '
@@ -94,11 +102,12 @@ def projects():
     ]
     perimeter = 2 * (card_w + card_h)
     for i, p in enumerate(PROJECTS):
-        x = pad + i * (card_w + gap)
+        x = pad + (i % cols) * (card_w + gap)
+        y = top + (i // cols) * (card_h + gap)
         delay = 0.25 + i * 0.18
         # Position on the outer group; the fade-in (a CSS transform) goes on the
         # inner one so it doesn't override the translate.
-        g = [f'<g transform="translate({x:.1f} {top})"><g class="f" style="animation-delay:{delay:.2f}s">']
+        g = [f'<g transform="translate({x:.1f} {y})"><g class="f" style="animation-delay:{delay:.2f}s">']
         g.append(f'<rect width="{card_w:.1f}" height="{card_h}" rx="14" fill="{CARD}" stroke="{BORDER}"/>')
         g.append(f'<rect width="{card_w:.1f}" height="90" rx="14" fill="url(#fadeTop)"/>')
         # Travelling light on the border.
@@ -112,7 +121,7 @@ def projects():
         # Index + tag.
         g.append(f'<text x="22" y="34" font-family="{MONO}" font-size="12" letter-spacing="2" fill="{MUTED}">'
                  f'0{i + 1} / PROJECT</text>')
-        tag_colour = {"live": KEY, "in progress": CYAN}.get(p["tag"], VIOLET)
+        tag_colour = {"live": KEY, "in progress": CYAN, "new": PINK}.get(p["tag"], VIOLET)
         tag_w = 22 + len(p["tag"]) * 7.4
         tx = card_w - 22 - tag_w
         g.append(f'<rect x="{tx:.1f}" y="18" width="{tag_w:.1f}" height="22" rx="11" fill="{tag_colour}" '
@@ -126,7 +135,7 @@ def projects():
         # Title + description.
         g.append(f'<text x="22" y="76" font-family="{SANS}" font-size="22" font-weight="700" fill="{TEXT}">'
                  f'{escape(p["name"])}</text>')
-        for j, line in enumerate(textwrap.wrap(p["desc"], 42)[:4]):
+        for j, line in enumerate(textwrap.wrap(p["desc"], int((card_w - 44) / 7.4))[:4]):
             g.append(f'<text x="22" y="{106 + j * 21}" font-family="{SANS}" font-size="14.5" fill="{MUTED}">'
                      f'{escape(line)}</text>')
         # Stack chips.
