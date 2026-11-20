@@ -1,5 +1,6 @@
 """Generate the section images that sit under the hero card:
-assets/projects.svg (featured projects) and assets/footer.svg.
+assets/projects-header.svg, one assets/project-<slug>.svg per project (so each
+card can link somewhere different in the README) and assets/footer.svg.
 
 Usage, from the repo root:
     python scripts/generate_sections.py
@@ -17,25 +18,33 @@ ASSETS = ROOT / "assets"
 PROJECTS = [
     {
         "name": "Tumbli",
-        "tag": "new",
+        "slug": "tumbli",
+        "tag": "live",
+        "url": "https://apps.microsoft.com/detail/9N6798TPR3KX",
         "desc": "A floating water buddy for Windows: a little bottle with a face that docks at the screen edge, fills up as you drink and reminds you to take a break.",
         "stack": ["Tauri", "Rust", "React", "TypeScript"],
     },
     {
         "name": "iQueue",
+        "slug": "iqueue",
         "tag": "in progress",
+        "url": None,  # no public link yet; the README points it at the terminal
         "desc": "Queue-management platform for campus offices: a student mobile app, an admin portal and a live display board.",
         "stack": ["Expo", "Next.js", "Express", "Prisma"],
     },
     {
         "name": "L.I.S.A.",
+        "slug": "lisa",
         "tag": "live",
+        "url": "https://lisa.bisubilar.org/",
         "desc": "Irrigation Survey & Analysis System for BISU Bilar: farmer surveys on a map, reports and AI-generated analysis.",
         "stack": ["React", "Express", "OpenLayers", "MySQL"],
     },
     {
         "name": "Dagohoy Pharmacy",
+        "slug": "dagohoy-pharmacy",
         "tag": "live",
+        "url": "https://dagohoypharmacy.boncales.com/",
         "desc": "Point-of-sale and pharmacy operations workspace with role-based screens for owners, admins and cashiers.",
         "stack": ["React", "TypeScript", "NestJS", "MySQL"],
     },
@@ -75,82 +84,78 @@ def prompt_line(x, y, command, flag, delay=0.0):
     )
 
 
-def projects():
-    pad, gap = 24, 20
-    cols = 2 if len(PROJECTS) % 2 == 0 and len(PROJECTS) % 3 else 3
-    rows = -(-len(PROJECTS) // cols)
-    card_w = (W - 2 * pad - (cols - 1) * gap) / cols
-    card_h = 236 if cols == 3 else 216
-    top = 62
-    H = top + rows * card_h + (rows - 1) * gap + pad
-    o = [
+def projects_header():
+    H = 46
+    return (
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" '
-        f'role="img" aria-label="Featured projects: '
-        + escape("; ".join(f"{p['name']}: {p['desc']}" for p in PROJECTS))
-        + '">',
+        f'role="img" aria-label="Featured projects">'
+        + STYLE
+        + prompt_line(8, 30, "projects", "--featured")
+        + f'<rect class="blink" x="{8 + 22 * 9.6:.1f}" y="16" width="9" height="18" fill="{TEXT}" opacity=".8"/>'
+        "</svg>"
+    )
+
+
+CARD_W, CARD_H, M = 548, 228, 4  # card size and margin (room for the glowing edge)
+
+
+def project_card(i, p):
+    w, h = CARD_W - 2 * M, CARD_H - 2 * M
+    delay = 0.2 + i * 0.15
+    perimeter = 2 * (w + h)
+    tag_colour = {"live": KEY, "in progress": CYAN, "new": PINK}.get(p["tag"], VIOLET)
+    tag_w = 22 + len(p["tag"]) * 7.4
+    tx = w - 22 - tag_w
+    o = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{CARD_W}" height="{CARD_H}" '
+        f'viewBox="0 0 {CARD_W} {CARD_H}" role="img" aria-label="{escape(p["name"])} ({escape(p["tag"])}): '
+        f'{escape(p["desc"])}">',
         "<defs>",
-        # A highlight that travels around each card's border.
-        f'<linearGradient id="edge" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="{card_w}" y2="{card_h}">'
+        f'<linearGradient id="edge" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="{w}" y2="{h}">'
         f'<stop offset="0" stop-color="{CYAN}"/><stop offset=".5" stop-color="{VIOLET}"/>'
         f'<stop offset="1" stop-color="{PINK}"/></linearGradient>',
         f'<linearGradient id="fadeTop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{VIOLET}" '
         f'stop-opacity=".08"/><stop offset="1" stop-color="{VIOLET}" stop-opacity="0"/></linearGradient>',
         "</defs>",
         STYLE,
-        prompt_line(pad + 4, 32, "projects", "--featured"),
-        f'<rect class="blink" x="{pad + 4 + 22 * 9.6:.1f}" y="18" width="9" height="18" fill="{TEXT}" opacity=".8"/>',
-    ]
-    perimeter = 2 * (card_w + card_h)
-    for i, p in enumerate(PROJECTS):
-        x = pad + (i % cols) * (card_w + gap)
-        y = top + (i // cols) * (card_h + gap)
-        delay = 0.25 + i * 0.18
         # Position on the outer group; the fade-in (a CSS transform) goes on the
         # inner one so it doesn't override the translate.
-        g = [f'<g transform="translate({x:.1f} {y})"><g class="f" style="animation-delay:{delay:.2f}s">']
-        g.append(f'<rect width="{card_w:.1f}" height="{card_h}" rx="14" fill="{CARD}" stroke="{BORDER}"/>')
-        g.append(f'<rect width="{card_w:.1f}" height="90" rx="14" fill="url(#fadeTop)"/>')
+        f'<g transform="translate({M} {M})"><g class="f" style="animation-delay:{delay:.2f}s">',
+        f'<rect width="{w}" height="{h}" rx="14" fill="{CARD}" stroke="{BORDER}"/>',
+        f'<rect width="{w}" height="90" rx="14" fill="url(#fadeTop)"/>',
         # Travelling light on the border.
-        g.append(
-            f'<rect x=".5" y=".5" width="{card_w - 1:.1f}" height="{card_h - 1}" rx="14" fill="none" '
-            f'stroke="url(#edge)" stroke-width="1.6" stroke-linecap="round" '
-            f'stroke-dasharray="{perimeter * 0.18:.0f} {perimeter * 0.82:.0f}">'
-            f'<animate attributeName="stroke-dashoffset" from="{perimeter:.0f}" to="0" dur="{6 + i}s" '
-            f'begin="{delay:.2f}s" repeatCount="indefinite"/></rect>'
-        )
-        # Index + tag.
-        g.append(f'<text x="22" y="34" font-family="{MONO}" font-size="12" letter-spacing="2" fill="{MUTED}">'
-                 f'0{i + 1} / PROJECT</text>')
-        tag_colour = {"live": KEY, "in progress": CYAN, "new": PINK}.get(p["tag"], VIOLET)
-        tag_w = 22 + len(p["tag"]) * 7.4
-        tx = card_w - 22 - tag_w
-        g.append(f'<rect x="{tx:.1f}" y="18" width="{tag_w:.1f}" height="22" rx="11" fill="{tag_colour}" '
-                 f'fill-opacity=".1" stroke="{tag_colour}" stroke-opacity=".5"/>')
-        g.append(f'<circle cx="{tx + 11:.1f}" cy="29" r="3" fill="{tag_colour}">'
-                 + ('<animate attributeName="opacity" values="1;.3;1" dur="1.6s" repeatCount="indefinite"/>'
-                    if p["tag"] != "shipped" else "")
-                 + "</circle>")
-        g.append(f'<text x="{tx + 19:.1f}" y="33" font-family="{MONO}" font-size="12" fill="{tag_colour}">'
-                 f'{escape(p["tag"])}</text>')
-        # Title + description.
-        g.append(f'<text x="22" y="76" font-family="{SANS}" font-size="22" font-weight="700" fill="{TEXT}">'
-                 f'{escape(p["name"])}</text>')
-        for j, line in enumerate(textwrap.wrap(p["desc"], int((card_w - 44) / 7.4))[:4]):
-            g.append(f'<text x="22" y="{106 + j * 21}" font-family="{SANS}" font-size="14.5" fill="{MUTED}">'
-                     f'{escape(line)}</text>')
-        # Stack chips.
-        cx = 22
-        for k, s in enumerate(p["stack"]):
-            w = 18 + len(s) * 7.6
-            colour = CYAN if k % 2 == 0 else VIOLET
-            g.append(f'<rect x="{cx:.1f}" y="{card_h - 46}" width="{w:.1f}" height="26" rx="13" fill="{colour}" '
-                     f'fill-opacity=".07" stroke="{colour}" stroke-opacity=".4"/>'
-                     f'<text x="{cx + w / 2:.1f}" y="{card_h - 28}" text-anchor="middle" font-family="{MONO}" '
-                     f'font-size="12" fill="{TEXT}">{escape(s)}</text>')
-            cx += w + 8
-        g.append("</g></g>")
-        o.extend(g)
-    o.append("</svg>")
+        f'<rect x=".5" y=".5" width="{w - 1}" height="{h - 1}" rx="14" fill="none" stroke="url(#edge)" '
+        f'stroke-width="1.6" stroke-linecap="round" stroke-dasharray="{perimeter * 0.18:.0f} {perimeter * 0.82:.0f}">'
+        f'<animate attributeName="stroke-dashoffset" from="{perimeter:.0f}" to="0" dur="{6 + i}s" '
+        f'begin="{delay:.2f}s" repeatCount="indefinite"/></rect>',
+        f'<text x="22" y="34" font-family="{MONO}" font-size="12" letter-spacing="2" fill="{MUTED}">'
+        f'0{i + 1} / PROJECT</text>',
+        f'<rect x="{tx:.1f}" y="18" width="{tag_w:.1f}" height="22" rx="11" fill="{tag_colour}" '
+        f'fill-opacity=".1" stroke="{tag_colour}" stroke-opacity=".5"/>',
+        f'<circle cx="{tx + 11:.1f}" cy="29" r="3" fill="{tag_colour}">'
+        '<animate attributeName="opacity" values="1;.3;1" dur="1.6s" repeatCount="indefinite"/></circle>',
+        f'<text x="{tx + 19:.1f}" y="33" font-family="{MONO}" font-size="12" fill="{tag_colour}">'
+        f'{escape(p["tag"])}</text>',
+        f'<text x="22" y="76" font-family="{SANS}" font-size="22" font-weight="700" fill="{TEXT}">'
+        f'{escape(p["name"])}</text>',
+    ]
+    # "Open" hint so it reads as clickable.
+    hint = "open ↗" if p["url"] else "explore ↗"
+    o.append(f'<text x="{w - 22}" y="76" text-anchor="end" font-family="{MONO}" font-size="12" '
+             f'fill="{CYAN}" opacity=".85">{hint}</text>')
+    for j, line in enumerate(textwrap.wrap(p["desc"], int((w - 44) / 7.4))[:4]):
+        o.append(f'<text x="22" y="{106 + j * 21}" font-family="{SANS}" font-size="14.5" fill="{MUTED}">'
+                 f'{escape(line)}</text>')
+    cx = 22
+    for k, s in enumerate(p["stack"]):
+        cw = 18 + len(s) * 7.6
+        colour = CYAN if k % 2 == 0 else VIOLET
+        o.append(f'<rect x="{cx:.1f}" y="{h - 46}" width="{cw:.1f}" height="26" rx="13" fill="{colour}" '
+                 f'fill-opacity=".07" stroke="{colour}" stroke-opacity=".4"/>'
+                 f'<text x="{cx + cw / 2:.1f}" y="{h - 28}" text-anchor="middle" font-family="{MONO}" '
+                 f'font-size="12" fill="{TEXT}">{escape(s)}</text>')
+        cx += cw + 8
+    o.append("</g></g></svg>")
     return "".join(o)
 
 
@@ -177,7 +182,9 @@ def footer():
 
 
 if __name__ == "__main__":
-    for name, svg in (("projects.svg", projects()), ("footer.svg", footer())):
+    outputs = [("projects-header.svg", projects_header()), ("footer.svg", footer())]
+    outputs += [(f"project-{p['slug']}.svg", project_card(i, p)) for i, p in enumerate(PROJECTS)]
+    for name, svg in outputs:
         path = ASSETS / name
         path.write_text(svg, encoding="utf-8")
         print(f"wrote {path.relative_to(ROOT)} ({path.stat().st_size // 1024} KB)")
