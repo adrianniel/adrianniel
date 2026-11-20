@@ -6,9 +6,12 @@
 
 <br />
 
-<a href="https://adrianniel.github.io/" title="Explore projects in the terminal">
-  <img src="assets/projects.svg" width="100%" alt="Featured projects. Tumbli (new): a floating water reminder for Windows that docks at the screen edge, fills up as you drink and reminds you to take a break, built with Tauri, Rust, React and TypeScript. iQueue (in progress): queue-management platform for campus offices with a student mobile app, an admin portal and a live display board, built with Expo, Next.js, Express and Prisma. L.I.S.A. (live): irrigation survey and analysis system for BISU Bilar with farmer surveys on a map, reports and AI-generated analysis, built with React, Express, OpenLayers and MySQL. Dagohoy Pharmacy (live): point-of-sale and pharmacy operations workspace with role-based screens, built with React, TypeScript, NestJS and MySQL." />
-</a>
+<img src="assets/projects-header.svg" width="100%" alt="Featured projects" />
+
+<a href="https://apps.microsoft.com/detail/9N6798TPR3KX" title="Get Tumbli on the Microsoft Store"><img src="assets/project-tumbli.svg" width="49%" alt="Tumbli (live): a floating water reminder for Windows that docks at the screen edge, fills up as you drink and reminds you to take a break. Built with Tauri, Rust, React and TypeScript. Available on the Microsoft Store." /></a>
+<a href="https://adrianniel.github.io/" title="Explore iQueue in the terminal"><img src="assets/project-iqueue.svg" width="49%" alt="iQueue (in progress): queue-management platform for campus offices with a student mobile app, an admin portal and a live display board. Built with Expo, Next.js, Express and Prisma." /></a>
+<a href="https://lisa.bisubilar.org/" title="Open L.I.S.A."><img src="assets/project-lisa.svg" width="49%" alt="L.I.S.A. (live): irrigation survey and analysis system for BISU Bilar with farmer surveys on a map, reports and AI-generated analysis. Built with React, Express, OpenLayers and MySQL." /></a>
+<a href="https://dagohoypharmacy.boncales.com/" title="Open Dagohoy Pharmacy"><img src="assets/project-dagohoy-pharmacy.svg" width="49%" alt="Dagohoy Pharmacy (live): point-of-sale and pharmacy operations workspace with role-based screens for owners, admins and cashiers. Built with React, TypeScript, NestJS and MySQL." /></a>
 
 <br /><br />
 
